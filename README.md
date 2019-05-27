@@ -12,6 +12,9 @@ Plugin that allows Flutter to communicate with a native WebView.
 The webview is not integrated in the widget tree, it is a native view on top of the flutter view.
 you won't be able to use snackbars, dialogs ...
 
+# Note
+** This fork integrates `flutter_webview_plugin#228` to fix clear cookie issues. **
+
 ## Getting Started
 
 For help getting started with Flutter, view our online [documentation](http://flutter.io/).
