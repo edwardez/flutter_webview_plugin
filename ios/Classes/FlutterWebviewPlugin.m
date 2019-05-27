@@ -103,9 +103,17 @@ static NSString *const CHANNEL_NAME = @"flutter_webview_plugin";
 
     if (clearCookies != (id)[NSNull null] && [clearCookies boolValue]) {
         if (@available(iOS 9.0, *)) {
-            NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeCookies]];
-            [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:dataTypes modifiedSince:[NSDate dateWithTimeIntervalSince1970:0] completionHandler:^(){
-            }];
+           WKWebsiteDataStore *dateStore = [WKWebsiteDataStore defaultDataStore];
+           [dateStore fetchDataRecordsOfTypes:[WKWebsiteDataStore allWebsiteDataTypes]
+                            completionHandler:^(NSArray<WKWebsiteDataRecord *> * __nonnull records) {
+                                for (WKWebsiteDataRecord *record  in records)
+                                {
+                                  [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:record.dataTypes
+                                                                                                                    forDataRecords:@[record]
+                                                                                                                 completionHandler:^{
+                                                                                                                 }];
+                                }
+                            }];
         } else {
             [[NSURLSession sharedSession] resetWithCompletionHandler:^{
             }];
