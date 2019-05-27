@@ -88,30 +88,30 @@ static NSString *const CHANNEL_NAME = @"flutter_webview_plugin";
     _invalidUrlRegex = call.arguments[@"invalidUrlRegex"];
 
     if (clearCache != (id)[NSNull null] && [clearCache boolValue]) {
-       if (@available(iOS 11.3, *)) {
-                   NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache, WKWebsiteDataTypeFetchCache]];
-                   [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:dataTypes modifiedSince:[NSDate dateWithTimeIntervalSince1970:0] completionHandler:^(){
-                   }];
-               } else if (@available(iOS 9.0, *)) {
-                   NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache]];
-                   [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:dataTypes modifiedSince:[NSDate dateWithTimeIntervalSince1970:0] completionHandler:^(){
-                   }];
-               } else {
-                   [[NSURLCache sharedURLCache] removeAllCachedResponses];
-               }
+        if (@available(iOS 11.3, *)) {
+            NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache, WKWebsiteDataTypeFetchCache]];
+            [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:dataTypes modifiedSince:[NSDate dateWithTimeIntervalSince1970:0] completionHandler:^(){
+            }];
+        } else if (@available(iOS 9.0, *)) {
+            NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache]];
+            [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:dataTypes modifiedSince:[NSDate dateWithTimeIntervalSince1970:0] completionHandler:^(){
+            }];
+        } else {
+            [[NSURLCache sharedURLCache] removeAllCachedResponses];
+        }
     }
 
     if (clearCookies != (id)[NSNull null] && [clearCookies boolValue]) {
-      if (@available(iOS 9.0, *)) {
-              }];
-                  NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeCookies]];
-                  [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:dataTypes modifiedSince:[NSDate dateWithTimeIntervalSince1970:0] completionHandler:^(){
-                  }];
-              } else {
-                  [[NSURLSession sharedSession] resetWithCompletionHandler:^{
-                  }];
-              }
+        if (@available(iOS 9.0, *)) {
+            NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeCookies]];
+            [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:dataTypes modifiedSince:[NSDate dateWithTimeIntervalSince1970:0] completionHandler:^(){
+            }];
+        } else {
+            [[NSURLSession sharedSession] resetWithCompletionHandler:^{
+            }];
+        }
     }
+
 
     if (userAgent != (id)[NSNull null]) {
         [[NSUserDefaults standardUserDefaults] registerDefaults:@{@"UserAgent": userAgent}];
